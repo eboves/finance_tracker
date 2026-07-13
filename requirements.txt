@@ -1,0 +1,9 @@
+fastapi	#The web framework — builds our API
+uvicorn	#The server that runs FastAPI
+sqlalchemy	#Turns your Python classes into database tables
+psycopg2-binary	#The connector between Python and PostgreSQL
+python-dotenv	#Reads your .env file into Python
+alembic	#Manages database migrations (changes to tables over time)
+bcrypt	#Hashes passwords
+python-jose	#Creates and verifies JWT tokens
+pydantic[email]	#Validates data — makes sure an email looks like an email
