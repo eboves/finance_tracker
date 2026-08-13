@@ -18,3 +18,13 @@ def get_connection():
     conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=db_port)
 
     return conn
+
+def get_accounts():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM accounts;")
+    accounts = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    return accounts
