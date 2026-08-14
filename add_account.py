@@ -1,11 +1,3 @@
-from database import get_connection
+from database import add_account
 
-conn = get_connection()
-cur = conn.cursor()
-
-cur.execute("INSERT INTO accounts (name, account_type, institution, date_opened) VALUES (%s, %s, %s, %s)", ("retirement roth ira", "roth_ira", "fidelity", "2012-03-08"))
-
-conn.commit()
-
-cur.close()
-conn.close()
+citi = add_account("citi", "credit_card", "citi", "2018-08-18")

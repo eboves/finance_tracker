@@ -16,7 +16,7 @@ def get_connection():
 
     # THIS CREATES A CONNECTION TO AN EXISTING DATABASE USING THE PARAMS BELLOW
     conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_password, host=db_host, port=db_port)
-
+  
     return conn
 
 def get_accounts():
@@ -28,3 +28,22 @@ def get_accounts():
     conn.close()
 
     return accounts
+
+def add_account(name, account_type, institution, date_opened):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO accounts (name, account_type, institution, date_opened) VALUES(%s, %s, %s, %s)", (name, account_type, institution, date_opened))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+def get_balance():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM balance;")
+    balance = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    return balance
+    
