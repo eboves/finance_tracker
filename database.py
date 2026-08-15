@@ -40,10 +40,24 @@ def add_account(name, account_type, institution, date_opened):
 def get_balance():
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM balance;")
-    balance = cur.fetchone()
+    cur.execute("SELECT SUM(amount) FROM balances;")
+    balance = cur.fetchall()
     cur.close()
     conn.close()
 
     return balance
+
+def add_balance(amount, date, account_name):
+    conn = get_connection()
+    cur = conn.cursor()
+    print(account_name) 
+    cur.execute("SELECT id FROM accounts WHERE account_type = %s;", (account_name,))
+    conn.commit()
+    account_id = cur.fetchone()[0]
+    # account_id = 12
+    print(account_id)
+    cur.execute("INSERT INTO balances (amount, account_id, date) VALUES (%s, %s, %s)", (amount, account_id, date))
+    conn.commit()
+    cur.close()
+    conn.close()
     
