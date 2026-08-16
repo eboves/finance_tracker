@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import psycopg2 
+from psycopg2.extras import RealDictCursor
 
 
 # THIS FUNCTION STABLISH THE CONNECTION WITH THE DATABASE
@@ -25,7 +26,7 @@ def get_accounts():
     accounts = None
     try:
         conn = get_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM accounts;")
         accounts = cur.fetchall()
         
@@ -62,7 +63,7 @@ def get_balance():
     balance = None
     try:
         conn = get_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT SUM(amount) FROM balances;")
         balance = cur.fetchall()
     except psycopg2.Error as e:
@@ -106,7 +107,7 @@ def get_balances():
     balances = None
     try:
         conn = get_connection()
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM balances;")
         balances = cur.fetchall()
     except psycopg2.Error as e:
