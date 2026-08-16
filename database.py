@@ -47,17 +47,28 @@ def get_balance():
 
     return balance
 
-def add_balance(amount, date, account_name):
-    conn = get_connection()
-    cur = conn.cursor()
-    print(account_name) 
-    cur.execute("SELECT id FROM accounts WHERE account_type = %s;", (account_name,))
-    conn.commit()
-    account_id = cur.fetchone()[0]
-    # account_id = 12
-    print(account_id)
-    cur.execute("INSERT INTO balances (amount, account_id, date) VALUES (%s, %s, %s)", (amount, account_id, date))
-    conn.commit()
-    cur.close()
-    conn.close()
+def add_balance(amount, date, name):
+    conn = None
+    cur = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        print(name) 
+        cur.execute("SELECT id FROM accounts WHERE name = %s;", (name,))
+        conn.commit()
+        account_id = cur.fetchone()[0]
+        print(account_id)
+        cur.execute("INSERT INTO balances (amount, account_id, date) VALUES (%s, %s, %s)", (amount, account_id, date))
+        conn.commit()
+    
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to run the script")
+    
+    finally:
+        if conn:
+            conn.close()
+        if cur: 
+            cur.close()
+
+    
     
