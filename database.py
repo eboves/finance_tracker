@@ -99,5 +99,22 @@ def add_balance(amount, date, name):
         if cur: 
             cur.close()
 
-    
-    
+
+def get_balances():
+    conn = None
+    cur = None
+    balances = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM balances;")
+        balances = cur.fetchall()
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to run the script")
+    finally:
+        if conn:
+            conn.close()
+        if cur:
+            cur.close()
+ 
+    return balances
