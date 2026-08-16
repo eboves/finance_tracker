@@ -20,30 +20,59 @@ def get_connection():
     return conn
 
 def get_accounts():
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM accounts;")
-    accounts = cur.fetchall()
-    cur.close()
-    conn.close()
+    conn = None
+    cur = None
+    accounts = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM accounts;")
+        accounts = cur.fetchall()
+        
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to run the script")
+    finally:
+        if conn:
+            conn.close()
+        if cur:
+            cur.close()
 
     return accounts
 
 def add_account(name, account_type, institution, date_opened):
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("INSERT INTO accounts (name, account_type, institution, date_opened) VALUES(%s, %s, %s, %s)", (name, account_type, institution, date_opened))
-    conn.commit()
-    cur.close()
-    conn.close()
+    conn = None
+    cur = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO accounts (name, account_type, institution, date_opened) VALUES(%s, %s, %s, %s)", (name, account_type, institution, date_opened))
+        conn.commit()
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to run the script")
+     
+    finally:
+        if conn:
+            conn.close()
+        if cur:
+            cur.close()
 
 def get_balance():
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT SUM(amount) FROM balances;")
-    balance = cur.fetchall()
-    cur.close()
-    conn.close()
+    conn = None
+    cur = None
+    balance = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT SUM(amount) FROM balances;")
+        balance = cur.fetchall()
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to run the script")
+
+    finally:
+        if conn:
+            conn.close()
+        if cur: 
+            cur.close()
 
     return balance
 
