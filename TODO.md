@@ -3,34 +3,45 @@
 Weekly goals for the Finance Tracker. Checked off as they're actually done and
 verified working — not just attempted.
 
-## This week (by Sun Aug 16, 2026) — finish V1
+## This week (by Sun Aug 23, 2026) — V2, Flask
 
-- [x] Working `get_connection()` in `database.py`
-- [x] `accounts` table designed and created (`schema.sql`)
-- [x] Working write path — `add_account.py` (parameterized INSERT)
-- [x] Working read path — `get_accounts()` (`fetchall()`)
-- [x] Refactor `add_account.py`'s insert logic into a proper `add_account()`
-      function in `database.py` (parameterized: name, account_type,
-      institution, date_opened) — same extraction pattern as
-      `get_connection()` / `get_accounts()`
-- [x] Design + create a `balances` table (`schema.sql`) — time-stamped
-      snapshots, separate from `accounts`, with a real foreign key to
-      `accounts(id)`
-- [x] Write `add_balance()` in `database.py` (found and fixed two real bugs:
-      unquoted `%s` placeholders, and passing a bare string instead of a
-      one-item tuple as the params argument)
-- [x] Write `get_balances()` — a real reader for the `balances` table
-- [x] Add basic `try`/`except`/`finally` error handling around all database
-      functions (`get_accounts`, `add_account`, `get_balance`, `add_balance`)
-      — found and fixed several real bugs along the way: unsafe cleanup when
-      `conn`/`cur` never got created, a copy-paste bug closing `conn` twice
-      instead of `cur`, and `UnboundLocalError` risk on returning a variable
-      that was never assigned when the query failed
+Already done today (Aug 16), carried here for the record:
+- [x] Install Flask, minimal "Hello World" app (`app.py`)
+- [x] `GET /accounts` route, wired to `get_accounts()`
+- [x] `GET /balances` route, wired to `get_balances()`
+- [x] Switched reader functions (`get_accounts`, `get_balance`, `get_balances`)
+      to `RealDictCursor` — JSON now returns labeled objects, not bare
+      positional arrays
 
-**Done with the list above = V1 complete.** Next up after that: V2, Flask.
+Remaining this week:
+- [ ] Set up Thunder Client (VS Code extension) — needed because browsers can
+      only easily test `GET` requests; testing `POST` requires a real API
+      client
+- [ ] `POST /accounts` route — reads data from the incoming request body
+      (`request.json`), calls `add_account()`, returns a proper response
+- [ ] `POST /balances` route — same idea, wired to `add_balance()`
+- [ ] Use correct HTTP status codes instead of always defaulting to `200` —
+      at minimum: `201` for "successfully created," `400` for bad/missing
+      input
+- [ ] Basic request validation — check required fields actually exist in the
+      request body before calling the database function
+- [ ] `GET /accounts/<id>` — a route with a URL parameter, returning one
+      specific account instead of all of them
+
+**Done with the list above = V2 substantially complete.** Next up after
+that: V3, full REST semantics (PUT/PATCH, DELETE, more validation).
+
+## Completed
+
+### V1 — Python + PostgreSQL foundation (done Aug 8-15, 2026)
+- Working `get_connection()`, `accounts` + `balances` tables (with a real
+  foreign key), full read/write on both, `try`/`except`/`finally` error
+  handling across every database function.
 
 ## Later (not this week)
 
 - More tables from original design: `dividends`, `contracts`, `concepts`
+- `PUT`/`PATCH`, `DELETE` routes (V3)
 - README with real project description, ER diagram
-- Flask app + routes (V2)
+- Authentication (V4)
+- pytest (V5)
