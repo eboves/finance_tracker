@@ -14,17 +14,24 @@ Already done today (Aug 16), carried here for the record:
       positional arrays
 
 Remaining this week:
-- [ ] Set up Thunder Client (VS Code extension) — needed because browsers can
+- [x] Set up Thunder Client (VS Code extension) — needed because browsers can
       only easily test `GET` requests; testing `POST` requires a real API
       client
-- [ ] `POST /accounts` route — reads data from the incoming request body
-      (`request.json`), calls `add_account()`, returns a proper response
-- [ ] `POST /balances` route — same idea, wired to `add_balance()`
-- [ ] Use correct HTTP status codes instead of always defaulting to `200` —
-      at minimum: `201` for "successfully created," `400` for bad/missing
-      input
+- [x] `POST /accounts` route — reads data from the incoming request body
+      (`request.json`), calls `add_account()`, returns `201` + echoes
+      submitted data (found/fixed real bugs along the way: `request.json` is
+      a property not a method, a misplaced status-code tuple, a typo'd dict
+      key, and Thunder Client's 415 error from not setting body type to JSON)
+- [x] `POST /balances` route — same idea, wired to `add_balance()` (also
+      fixed a REST consistency bug: route was `/balance` singular while GET
+      was `/balances` plural — same resource must use the same URL path,
+      method is what differs)
+- [x] Use correct HTTP status codes — `201` for "successfully created" on
+      both POST routes
 - [ ] Basic request validation — check required fields actually exist in the
-      request body before calling the database function
+      request body before calling the database function, return `400` with
+      a clear message if something's missing (not yet done on either POST
+      route — currently a missing field would crash with a raw 500 error)
 - [ ] `GET /accounts/<id>` — a route with a URL parameter, returning one
       specific account instead of all of them
 
