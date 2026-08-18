@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from database import get_accounts, get_balances, add_account
+from database import get_accounts, get_balances, add_account, add_balance
 
 app = Flask(__name__)
 
@@ -27,6 +27,15 @@ def post_accounts():
     date_opened = data['date_opened']
     adding_account = add_account(name=name, account_type=account_type, institution=institution, date_opened=date_opened)
     return jsonify({"message":"Operation Success!", "accounts": data}), 201
+
+@app.route("/balances", methods=["POST"])
+def post_balance():
+    data = request.json
+    amount = data['amount']
+    date = data['date']
+    name = data['name']
+    add_balance(amount=amount, date=date, name=name)
+    return jsonify({"message":"Success!", "data": data}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
