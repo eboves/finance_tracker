@@ -52,3 +52,18 @@ that: V3, full REST semantics (PUT/PATCH, DELETE, more validation).
 - README with real project description, ER diagram
 - Authentication (V4)
 - pytest (V5)
+- Deployment (V6, Railway/Render)
+- **Frontend — AFTER backend (V1-V7) is done, not before.** Decided:
+  Flask + Jinja2 server-rendered HTML, NOT React — no new language/build
+  tooling, no CORS (same origin as the API), simpler deployment (one app,
+  not two), and a stronger story for backend-focused interviews. Scope
+  small on purpose: a simple read-only dashboard against the existing
+  `GET /accounts` and `GET /balances` endpoints (totals, account list) —
+  not a full CRUD UI with forms. Elvis writes the Python/Jinja2 logic
+  himself; AI help is fair game specifically for HTML/CSS visual styling,
+  which he can honestly frame in interviews as "I built the backend and
+  the page logic; used AI for the parts outside my specialty (visual
+  design)" — a legitimate, honest positioning, not something to hide.
+  Timing risk to watch: backend is projected to finish ~early-to-mid Oct,
+  job target is November — keep this to 1-3 focused sessions when the
+  time comes, not an open-ended build that eats into interview prep.
