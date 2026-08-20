@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from database import get_accounts, get_balances, add_account, add_balance
+from database import get_accounts, get_balances, add_account, add_balance, get_account_by_id
 
 app = Flask(__name__)
 
@@ -63,6 +63,21 @@ def post_balance():
     
     add_balance(amount=amount, date=date, name=name)
     return jsonify({"message":"Success!", "data": data}), 201
+
+
+@app.route("/accounts/<int:account_id>")
+def get_account_by_id_route(account_id):
+
+    
+    account = get_account_by_id(account_id)
+    print(account)
+    if account == None:
+       return jsonify({"Error": "Account not fount withat that id"}), 404
+    return jsonify(account)
+    # account = get_account_by_id(account_id)
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

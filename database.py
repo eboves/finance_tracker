@@ -119,3 +119,27 @@ def get_balances():
             cur.close()
  
     return balances
+
+
+
+def get_account_by_id(account_id):
+
+    conn = None
+    cur = None
+    account = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT * FROM accounts WHERE id = %s", (account_id,))
+        account = cur.fetchone()
+
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to the account by its id")
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+    return account
