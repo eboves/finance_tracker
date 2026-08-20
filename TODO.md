@@ -28,15 +28,20 @@ Remaining this week:
       method is what differs)
 - [x] Use correct HTTP status codes — `201` for "successfully created" on
       both POST routes
-- [ ] Basic request validation — check required fields actually exist in the
-      request body before calling the database function, return `400` with
-      a clear message if something's missing (not yet done on either POST
-      route — currently a missing field would crash with a raw 500 error)
-- [ ] `GET /accounts/<id>` — a route with a URL parameter, returning one
-      specific account instead of all of them
+- [x] Basic request validation — `400` + clear message on both POST routes
+      when a required field is missing (found/fixed a real bug along the
+      way: checks were testing extracted *values* against `data` instead of
+      the literal string keys, and extraction was happening before
+      validation instead of after)
+- [x] `GET /accounts/<id>` — route parameter (`<int:account_id>`), new
+      `get_account_by_id()` using `fetchone()` (not `fetchall()` — an `id`
+      is unique, at most one row possible), `404` on a nonexistent id,
+      `RealDictCursor` for consistent labeled JSON
 
-**Done with the list above = V2 substantially complete.** Next up after
-that: V3, full REST semantics (PUT/PATCH, DELETE, more validation).
+**V2 COMPLETE as of Aug 19/20, 2026** — a Flask app with working GET/POST
+routes on two resources, proper status codes (200/201/400/404), real
+request validation, and a single-resource route. Next up: V3, full REST
+semantics (PUT/PATCH, DELETE, deeper validation).
 
 ## Completed
 

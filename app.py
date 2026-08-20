@@ -71,7 +71,7 @@ def get_account_by_id_route(account_id):
     
     account = get_account_by_id(account_id)
     print(account)
-    if account == None:
+    if account is None:
        return jsonify({"Error": "Account not fount withat that id"}), 404
     return jsonify(account)
     # account = get_account_by_id(account_id)
