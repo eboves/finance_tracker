@@ -3,7 +3,32 @@
 Weekly goals for the Finance Tracker. Checked off as they're actually done and
 verified working — not just attempted.
 
-## This week (by Sun Aug 23, 2026) — V2, Flask
+## This week (by Sun Aug 30, 2026) — V3, full REST semantics
+
+V2 finished early (Aug 20, 3 days ahead of its own deadline) — new goal
+starts now rather than waiting for the calendar week to reset.
+
+- [ ] `update_account()` in `database.py` — real `UPDATE ... WHERE id = %s`
+      SQL (first time using `UPDATE`; the `WHERE` clause is not optional —
+      omit it and every row gets overwritten, not just one)
+- [ ] `PUT /accounts/<int:account_id>` route — full replacement semantics,
+      validated fields (same `400` pattern as POST), returns `200` (not
+      `201` — nothing new was created)
+- [ ] `PATCH /accounts/<int:account_id>` — partial update (only the fields
+      actually sent get changed, everything else stays as-is); different
+      semantics from PUT on purpose, not just a copy of it
+- [ ] `DELETE /accounts/<int:account_id>` — `delete_account()` with the same
+      `WHERE id = %s` safety rule, correct status code for a successful
+      delete (`204 No Content` is conventional — no body needed)
+- [ ] Apply the same PUT/PATCH/DELETE pattern to `/balances/<id>` — mostly
+      independently this time, same shape already built once for accounts
+
+**Done with the list above = V3 complete: full CRUD, all major HTTP
+methods, on both existing resources.** After that: `dividends`,
+`contracts`, `concepts` tables become a more independent "build it, I'll
+review" exercise rather than a taught lesson (see reasoning below).
+
+## Previous week (by Sun Aug 23, 2026) — V2, Flask
 
 Already done today (Aug 16), carried here for the record:
 - [x] Install Flask, minimal "Hello World" app (`app.py`)
@@ -50,10 +75,17 @@ semantics (PUT/PATCH, DELETE, deeper validation).
   foreign key), full read/write on both, `try`/`except`/`finally` error
   handling across every database function.
 
+### V2 — Flask (done Aug 16-20, 2026)
+- Flask app with GET/POST routes on two resources, `RealDictCursor` for
+  labeled JSON, proper status codes (200/201/400/404), real request
+  validation, single-resource route with a URL parameter.
+
 ## Later (not this week)
 
-- More tables from original design: `dividends`, `contracts`, `concepts`
-- `PUT`/`PATCH`, `DELETE` routes (V3)
+- More tables from original design: `dividends`, `contracts`, `concepts` —
+  once V3 is done, this becomes a semi-independent "you build it, I review"
+  exercise rather than a taught lesson (depth-before-breadth decision made
+  Aug 20 2026 — full REST on 2 resources beats partial REST on 5)
 - README with real project description, ER diagram
 - Authentication (V4)
 - pytest (V5)
