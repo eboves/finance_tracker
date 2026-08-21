@@ -143,3 +143,28 @@ def get_account_by_id(account_id):
             conn.close()
 
     return account
+
+
+def update_account_by_id(name, account_type, institution, date_opened, id):
+    conn = None
+    cur = None
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE accounts SET name = %s, account_type = %s, institution = %s, date_opened = %s WHERE id = %s", (name, account_type, institution, date_opened, id))
+        conn.commit()
+    except psycopg2.Error as e:
+        print(f"The Error: {e} was cought while trying to update the account")
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+
+
+
+
+

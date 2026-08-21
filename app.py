@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from database import get_accounts, get_balances, add_account, add_balance, get_account_by_id
+from database import get_accounts, get_balances, add_account, add_balance, get_account_by_id, update_account_by_id
 
 app = Flask(__name__)
 
@@ -77,7 +77,28 @@ def get_account_by_id_route(account_id):
     # account = get_account_by_id(account_id)
 
 
+################################################### PUT ################################################### 
 
+@app.route("/accounts/<int:account_id>", methods=["PUT"])
+def update_account_using_id(account_id):
+
+    data = request.json
+    if 'name' not in data:
+       return jsonify({"message": "name is missing"}), 400
+    if 'account_type' not in data:
+        return jsonify({"message": "account_type is missing"}), 400
+    if 'institution' not in data:
+        return jsonify({"message": "institution is missing"}), 400
+    if 'date_opened' not in data:
+        return jsonify({"message": "date_opened is missing"}), 400
+    
+    name = data['name']
+    account_type = data['account_type']
+    institution = data['institution']
+    date_opened = data['date_opened']
+
+    update_account_by_id(name=name, account_type=account_type, institution=institution, date_opened=date_opened, id=account_id)
+    return jsonify({"message":"SUCCESSFUL!", "data": data}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
@@ -90,4 +111,8 @@ if __name__ == "__main__":
 #     "amount": 2453.76,
 #     "date": "2026-08-18",
 #     "name": "retirement roth ira"
+# }
+
+# {
+#   "message": "institution is missing"
 # }
