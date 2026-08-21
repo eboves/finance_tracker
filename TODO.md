@@ -8,12 +8,14 @@ verified working — not just attempted.
 V2 finished early (Aug 20, 3 days ahead of its own deadline) — new goal
 starts now rather than waiting for the calendar week to reset.
 
-- [ ] `update_account()` in `database.py` — real `UPDATE ... WHERE id = %s`
-      SQL (first time using `UPDATE`; the `WHERE` clause is not optional —
-      omit it and every row gets overwritten, not just one)
-- [ ] `PUT /accounts/<int:account_id>` route — full replacement semantics,
-      validated fields (same `400` pattern as POST), returns `200` (not
-      `201` — nothing new was created)
+- [x] `update_account_by_id()` in `database.py` — real `UPDATE ... WHERE
+      id = %s` SQL (first time using `UPDATE`), verified via `psql` that
+      the row was overwritten in place (same `id`, unchanged `created_at`,
+      new values) — not a new row created
+- [x] `PUT /accounts/<int:account_id>` route — full replacement semantics,
+      validated fields (same `400` pattern as POST), returns `200` (found
+      and fixed a real bug: initially returned `201`, which is wrong —
+      `201` means "created," this is an update to an existing resource)
 - [ ] `PATCH /accounts/<int:account_id>` — partial update (only the fields
       actually sent get changed, everything else stays as-is); different
       semantics from PUT on purpose, not just a copy of it
