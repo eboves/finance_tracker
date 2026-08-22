@@ -100,6 +100,26 @@ def update_account_using_id(account_id):
     update_account_by_id(name=name, account_type=account_type, institution=institution, date_opened=date_opened, id=account_id)
     return jsonify({"message":"SUCCESSFUL!", "data": data}), 200
 
+
+
+################################################### PUT ################################################### 
+
+@app.route("/accounts/<account_id>", methods = ["PATCH"])
+def update_account_using_patch(account_id):
+    data = request.json
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 
