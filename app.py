@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from database import get_accounts, get_balances, add_account, add_balance, get_account_by_id, update_account_by_id
+from database import get_accounts, get_balances, add_account, add_balance, get_account_by_id, update_account_by_id, delete_account_by_id
 
 app = Flask(__name__)
 
@@ -128,6 +128,13 @@ def update_account_using_patch(account_id):
     return jsonify({"message": "SUCCESS!", "data": data}), 200
     
 
+@app.route("/accounts/<int:account_id>", methods=["DELETE"])
+def delete_item_using_account_id(account_id):
+    deleted_account = delete_account_by_id(account_id=account_id)
+    if deleted_account == 0:
+        return "", 404
+    else:
+        return "", 204
 
 
 

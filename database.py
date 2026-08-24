@@ -164,7 +164,27 @@ def update_account_by_id(name, account_type, institution, date_opened, id):
             conn.close()
 
 
+def delete_account_by_id(account_id):
+    conn = None
+    cur = None
+    items_deleted = 0
 
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM accounts WHERE id = %s", (account_id,)) 
+        conn.commit()
+        items_deleted = cur.rowcount
+    except psycopg2.Error as e:
+        print(f"message: The program crashed because of this error: {e}")
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+    return items_deleted
 
 
 

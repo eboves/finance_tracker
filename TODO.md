@@ -16,12 +16,20 @@ starts now rather than waiting for the calendar week to reset.
       validated fields (same `400` pattern as POST), returns `200` (found
       and fixed a real bug: initially returned `201`, which is wrong —
       `201` means "created," this is an update to an existing resource)
-- [ ] `PATCH /accounts/<int:account_id>` — partial update (only the fields
-      actually sent get changed, everything else stays as-is); different
-      semantics from PUT on purpose, not just a copy of it
-- [ ] `DELETE /accounts/<int:account_id>` — `delete_account()` with the same
-      `WHERE id = %s` safety rule, correct status code for a successful
-      delete (`204 No Content` is conventional — no body needed)
+- [x] `PATCH /accounts/<int:account_id>` — partial update, verified via
+      `psql`: only the one field sent actually changed, everything else
+      stayed exactly as it was (fixed a route-syntax bug along the way —
+      `int:` converter must go *inside* the `<>` brackets, not before them
+      — plus the same status-code and fallback-value bugs as before,
+      applied consistently to all 4 fields this time)
+- [x] `DELETE /accounts/<int:account_id>` — `delete_account_by_id()` using
+      `cur.rowcount` to detect whether anything was actually deleted, `204`
+      on success / `404` on a nonexistent id — all three verified via real
+      server logs (found/fixed a real bug: the DB function was returning a
+      tuple `(count, 204)` instead of a plain count, which silently broke
+      the 404 check — `deleted == 0` can never be True when `deleted` is
+      actually a tuple; status codes belong in the Flask layer, not the
+      database layer)
 - [ ] Apply the same PUT/PATCH/DELETE pattern to `/balances/<id>` — mostly
       independently this time, same shape already built once for accounts
 
