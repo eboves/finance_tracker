@@ -104,9 +104,29 @@ def update_account_using_id(account_id):
 
 ################################################### PUT ################################################### 
 
-@app.route("/accounts/<account_id>", methods = ["PATCH"])
+@app.route("/accounts/<int:account_id>", methods = ["PATCH"])
 def update_account_using_patch(account_id):
-    data = request.json
+
+    existing = get_account_by_id(account_id=account_id)
+    print(existing)
+    if existing is None:
+        return jsonify({"message": "None account exist with that account_id"}), 404
+
+    data = request.get_json()  
+    print(data)
+
+    name = data.get('name', existing['name'])
+    account_type = data.get('account_type', existing['account_type'])
+    institution = data.get('institution', existing['institution'])
+    date_opened = data.get('date_opened', existing['date_opened'])
+
+
+    # if not data:
+    #     return jsonify({"message": "Error occured while loading data"}), 404
+    
+    update_account_by_id(name=name, account_type=account_type, institution=institution, date_opened=date_opened, id=account_id)
+    return jsonify({"message": "SUCCESS!", "data": data}), 200
+    
 
 
 
@@ -135,4 +155,12 @@ if __name__ == "__main__":
 
 # {
 #   "message": "institution is missing"
+# }
+
+
+# {
+#   "name":"401K",
+#   "account_type": "savings",
+#   "institution": "job",
+#   "date_opened": "2026-11-08"
 # }
