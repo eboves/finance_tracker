@@ -187,4 +187,72 @@ def delete_account_by_id(account_id):
     return items_deleted
 
 
+def get_balance_by_id(balance_id):
+    conn = None
+    cur = None
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT * FROM balances WHERE id = %s", (balance_id,))
+        balance_by_id = cur.fetchone()
+
+    except psycopg2.Error as e:
+        print(f"Message: site broke because of this error: {e}")
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+    return balance_by_id
+
+def update_balance_by_id(id, date, amount, account_id):
+    conn = None
+    cur = None
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE balances SET date = %s, amount = %s, account_id = %s WHERE id = %s" , (date, amount, account_id, id))
+        conn.commit()
+    except psycopg2.Error as e:
+        print(f"message: site crashed because this error: {e}")
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+
+def delete_balance_by_id(balance_id):
+    conn = None
+    cur = None
+    item_deleted = 0
+    try: 
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM balances WHERE id = %s", (balance_id,))
+        conn.commit()
+        item_deleted = cur.rowcount
+
+
+    except psycopg2.Error as e:
+        print(f"message: item could not be deleted because of this error: {e}")
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+            
+    return item_deleted
+
+
+
+
+
+
 
