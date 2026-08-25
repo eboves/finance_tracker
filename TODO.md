@@ -3,7 +3,7 @@
 Weekly goals for the Finance Tracker. Checked off as they're actually done and
 verified working — not just attempted.
 
-## This week (by Sun Aug 30, 2026) — V3, full REST semantics
+## Previous week (by Sun Aug 30, 2026) — V3, full REST semantics — DONE Aug 25
 
 V2 finished early (Aug 20, 3 days ahead of its own deadline) — new goal
 starts now rather than waiting for the calendar week to reset.
@@ -30,13 +30,23 @@ starts now rather than waiting for the calendar week to reset.
       the 404 check — `deleted == 0` can never be True when `deleted` is
       actually a tuple; status codes belong in the Flask layer, not the
       database layer)
-- [ ] Apply the same PUT/PATCH/DELETE pattern to `/balances/<id>` — mostly
-      independently this time, same shape already built once for accounts
+- [x] Applied the same PUT/PATCH/DELETE pattern to `/balances/<id>` —
+      built almost entirely independently, including `get_balance_by_id()`
+      (needed for PATCH's fetch-then-merge, self-identified without being
+      told), and correctly avoided repeating the earlier `DELETE` tuple bug
+      on `delete_balance_by_id()` without prompting. Recovered from a real
+      incident along the way: `update_balance_by_id()` initially filtered
+      `WHERE account_id = %s` instead of `WHERE id = %s` — since
+      `account_id` isn't unique (many balances can share one account), this
+      overwrote multiple rows with the same values before being caught and
+      fixed. All three methods verified via real `psql` snapshots showing
+      selective, correct single-row targeting.
 
-**Done with the list above = V3 complete: full CRUD, all major HTTP
-methods, on both existing resources.** After that: `dividends`,
-`contracts`, `concepts` tables become a more independent "build it, I'll
-review" exercise rather than a taught lesson (see reasoning below).
+**V3 COMPLETE as of Aug 25, 2026** — full CRUD (all 4 HTTP methods),
+correct status codes throughout, real validation, on BOTH `accounts` and
+`balances`. Next: `dividends`/`contracts`/`concepts` tables become a
+semi-independent "build it, I'll review" exercise rather than a taught
+lesson (depth-before-breadth decision, see Later section).
 
 ## Previous week (by Sun Aug 23, 2026) — V2, Flask
 
@@ -90,11 +100,17 @@ semantics (PUT/PATCH, DELETE, deeper validation).
   labeled JSON, proper status codes (200/201/400/404), real request
   validation, single-resource route with a URL parameter.
 
-## Later (not this week)
+### V3 — Full REST semantics (done Aug 20-25, 2026)
+- Full CRUD (`GET`/`POST`/`PUT`/`PATCH`/`DELETE`) on both `accounts` and
+  `balances`, correct status codes throughout, real validation. Recovered
+  from a real data-corruption incident (wrong `WHERE` column) — genuine
+  debugging experience, good interview material.
 
-- More tables from original design: `dividends`, `contracts`, `concepts` —
-  once V3 is done, this becomes a semi-independent "you build it, I review"
-  exercise rather than a taught lesson (depth-before-breadth decision made
+## Now up — semi-independent build (not this-week-scoped, ongoing)
+
+- `dividends`, `contracts`, `concepts` tables — full CRUD each, same
+  pattern as `accounts`/`balances`, built mostly independently with review
+  rather than taught step by step (depth-before-breadth decision made
   Aug 20 2026 — full REST on 2 resources beats partial REST on 5)
 - README with real project description, ER diagram
 - Authentication (V4)
