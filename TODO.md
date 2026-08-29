@@ -112,6 +112,13 @@ semantics (PUT/PATCH, DELETE, deeper validation).
   pattern as `accounts`/`balances`, built mostly independently with review
   rather than taught step by step (depth-before-breadth decision made
   Aug 20 2026 — full REST on 2 resources beats partial REST on 5)
+- Two more tables identified from the dashboard mockup (Aug 2026): a
+  `holdings` table (stock positions — ticker, company name, quantity, cost
+  basis; NOT the same thing as `dividends`) and a `goals` table (target
+  amount, current progress, optional target date — e.g. "AMEX payoff:
+  $880/$4,000, target March 2027"). `concepts` may already be intended for
+  the "this week's investing concept" educational card — confirm with
+  Elvis when that table gets designed.
 - README with real project description, ER diagram
 - Authentication (V4)
 - pytest (V5)
@@ -119,14 +126,29 @@ semantics (PUT/PATCH, DELETE, deeper validation).
 - **Frontend — AFTER backend (V1-V7) is done, not before.** Decided:
   Flask + Jinja2 server-rendered HTML, NOT React — no new language/build
   tooling, no CORS (same origin as the API), simpler deployment (one app,
-  not two), and a stronger story for backend-focused interviews. Scope
-  small on purpose: a simple read-only dashboard against the existing
-  `GET /accounts` and `GET /balances` endpoints (totals, account list) —
-  not a full CRUD UI with forms. Elvis writes the Python/Jinja2 logic
-  himself; AI help is fair game specifically for HTML/CSS visual styling,
-  which he can honestly frame in interviews as "I built the backend and
-  the page logic; used AI for the parts outside my specialty (visual
-  design)" — a legitimate, honest positioning, not something to hide.
+  not two), and a stronger story for backend-focused interviews. Elvis
+  writes the Python/Jinja2 logic himself; AI help is fair game
+  specifically for HTML/CSS visual styling — honest interview framing:
+  "I built the backend and the page logic; used AI for the parts outside
+  my specialty (visual design)."
+  **Concrete target mockup provided Aug 2026** (dark dashboard, "Finance
+  tracker — Money Sunday"): Net Worth / Total Assets / Total Liabilities /
+  Monthly Dividends summary cards; Assets and Liabilities breakdown by
+  account with progress bars; AMEX payoff progress with a target date;
+  Stock portfolio section (ticker, price, % change, covered-calls badges);
+  Dividends-this-month by ticker; Goals tracker (dividends/emergency
+  fund/AMEX payoff, current vs target); "This week's investing concept"
+  educational card. This is the destination, not something to build in one
+  pass — needs the `holdings`/`goals` tables above plus aggregation logic
+  (net worth = assets − liabilities, % of goal, etc.) before the page
+  itself is worth building.
+  **Live stock prices/% change via an external API — confirmed IN scope**
+  (decided Aug 2026, not just a maybe): genuinely valuable backend skill
+  (third-party API calls, handling their responses/errors, managing
+  another secret safely). Sequenced with the `holdings` table build,
+  since price data belongs to holdings, not accounts/balances — not
+  something to start before then.
   Timing risk to watch: backend is projected to finish ~early-to-mid Oct,
-  job target is November — keep this to 1-3 focused sessions when the
-  time comes, not an open-ended build that eats into interview prep.
+  job target is November — keep the frontend phase to a handful of
+  focused sessions when the time comes, not an open-ended build that eats
+  into interview prep.
